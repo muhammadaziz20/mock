@@ -49,8 +49,6 @@ select{font:inherit;padding:8px 10px;border-radius:9px;border:1.5px solid var(--
 .text .quote{font-style:italic;border-left:3px solid var(--line);padding-left:12px}
 .audio{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px;display:grid;gap:8px}
 .audio .at{font-weight:700}.audio audio{width:100%}
-.file{justify-self:start;display:inline-block;padding:6px 12px;border:1px dashed var(--acc);color:var(--acc);border-radius:9px;font-weight:600;font-size:14px;cursor:pointer}
-.file input{display:none}
 small{color:var(--mute)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .job{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);display:flex;flex-direction:column;gap:8px}
@@ -85,8 +83,12 @@ nav.bar .btn[disabled]{opacity:.35}
 .pn{width:38px;height:38px;border-radius:9px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
 .pn.done{background:var(--acc);border-color:var(--acc);color:#fff}
 .modal{position:fixed;inset:0;z-index:50;background:#000a;display:none;place-items:center;padding:14px}.modal.on{display:grid}
-.mbox{background:var(--card);border-radius:16px;padding:20px;max-width:460px;width:100%;display:grid;gap:10px}
+.mbox{background:var(--card);border-radius:16px;padding:20px;max-width:480px;width:100%;display:grid;gap:10px;max-height:90vh;overflow:auto;align-content:start}
 .sc{font-size:34px;font-weight:800;color:var(--acc)}
+.pn.ok{background:var(--ok);border-color:var(--ok);color:#000}.pn.bad{background:#ef4444;border-color:#ef4444;color:#fff}
+details{border:1px solid var(--line);border-radius:10px;padding:8px 12px}summary{cursor:pointer;font-weight:600}
+ul.wr{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px}ul.wr li{padding:6px 8px;border-radius:8px;background:var(--bg);cursor:pointer;font-size:14px}
+ul.wr .x{color:#ef4444;font-weight:600}ul.wr .y{color:var(--ok)}
 @media (max-width:640px){.grid2{grid-template-columns:1fr}.brand{font-size:14px}.pics{grid-template-columns:1fr 1fr}h2{font-size:20px}.text p{text-align:left}.gap{width:7.5em}}
 </style>
 </head>
@@ -112,10 +114,12 @@ nav.bar .btn[disabled]{opacity:.35}
 
 <script>
 /* ====== SOZLAMALAR ====== */
-// Audio fayllar yo'li (HTML bilan bir papkada audio/ ichiga qo'ying) yoki sahifada "Audio tanlash" tugmasi bilan yuklang
-const AUDIO={1:"audio/part1.mp3",2:"audio/part2.mp3",3:"audio/part3.mp3",4:"audio/part4.mp3",5:"audio/part5.mp3",6:"audio/part6.mp3"};
-// To'g'ri javoblar kaliti (ixtiyoriy). Masalan: {"L1":"B","L9":"museum","R21":"C"}  — to'ldirsangiz, Yakunlashda ball hisoblanadi
-const KEY={};
+// Audio fayllar shu HTML fayl bilan bir papkada turadi: part1.mp3 ... part6.mp3
+const AUDIO={1:"part1.mp3",2:"part2.mp3",3:"part3.mp3",4:"part4.mp3",5:"part5.mp3",6:"part6.mp3"};
+// To'g'ri javoblar kaliti (Listening L1-L35, Reading R1-R35). Writing va Speaking qo'lda tekshiriladi.
+const KEY={"L1":"C","L2":"A","L3":"C","L4":"B","L5":"A","L6":"A","L7":"C","L8":"B","L9":"coach","L10":"lake","L11":"park","L12":"picnic","L13":"museum","L14":"raincoat","L15":"A","L16":"F","L17":"B","L18":"D","L19":"D","L20":"C","L21":"A","L22":"E","L23":"H","L24":"A","L25":"B","L26":"C","L27":"A","L28":"B","L29":"A","L30":"market","L31":"quality","L32":"feelings","L33":"happiness","L34":"cookies","L35":"sales","R1":"wall","R2":"construction","R3":"regulate","R4":"attacks","R5":"regulate","R6":"ancient","R7":"C","R8":"F","R9":"E","R10":"A","R11":"G","R12":"D","R13":"H","R14":"B","R15":"C","R16":"D","R17":"G","R18":"H","R19":"B","R20":"E","R21":"C","R22":"B","R23":"D","R24":"A","R25":"B","R26":"C","R27":"B","R28":"A","R29":"A","R30":"legal","R31":"40","R32":"commute","R33":"isolated","R34":"B","R35":"B"};
+// Qo'shimcha qabul qilinadigan javoblar (bo'sh joyli savollar uchun)
+const ALT={"R31":["40%","forty"]};
 /* ======================== */
 
 const $=s=>document.querySelector(s);
@@ -127,7 +131,7 @@ const mcq=(p,n,q,opts)=>{const id=p+n;return `<div class="q"><p class="qt"><b>${
 const tfng=(p,n,q)=>{const id=p+n;return `<div class="q"><p class="qt"><b>${n}.</b> ${q}</p><div class="row-opts">${["True","False","Not Given"].map((o,i)=>`<label class="opt"><input type="radio" name="${id}" value="${LET[i]}" data-q="${id}"><span class="k">${LET[i]}</span><span>${o}</span></label>`).join("")}</div></div>`};
 const gp=(p,t)=>t.replace(/\[\[(\d+)\]\]/g,(_,n)=>`<span class="gw"><b>(${n})</b><input class="gap" data-q="${p}${n}" placeholder="${n}" autocomplete="off" autocapitalize="off" spellcheck="false"></span>`);
 const sel=(p,n,list)=>`<select data-q="${p}${n}"><option value="">—</option>${list.split("").map(c=>`<option>${c}</option>`).join("")}</select>`;
-const audioCard=n=>`<div class="audio"><div class="at">🎧 Listening — Part ${n} (audio)</div><audio controls preload="none" id="au${n}" src="${AUDIO[n]}"></audio><label class="file">📁 Audio fayl tanlash<input type="file" accept="audio/*" data-au="${n}"></label><small>Standart fayl nomi: ${AUDIO[n]}</small></div>`;
+const audioCard=n=>`<div class="audio"><div class="at">🎧 Listening — Part ${n} (audio)</div><audio controls preload="none" id="au${n}" src="${AUDIO[n]}"></audio></div>`;
 const paras=a=>a.map(t=>`<p>${t}</p>`).join("");
 
 /* ---------- MAP ---------- */
@@ -230,8 +234,7 @@ Object.keys(SECS).forEach(k=>{const b=document.createElement("button");b.classNa
 function restore(){document.querySelectorAll("[data-q]").forEach(e=>{const v=ans[e.dataset.q];if(v==null)return;if(e.type=="radio")e.checked=e.value==v;else{e.value=v;}});document.querySelectorAll("textarea[data-q]").forEach(wc)}
 function wc(t){const n=(t.value.trim().match(/\S+/g)||[]).length,d=t.nextElementSibling;const mn=+t.dataset.min,mx=+t.dataset.max;d.textContent=`${n} words (target ${mn}–${mx})`;d.className="wc"+(n>=mn&&n<=mx?" good":"")}
 document.addEventListener("input",e=>{const t=e.target;if(t.dataset&&t.dataset.q&&t.type!="radio"){ans[t.dataset.q]=t.value.trim();save();if(t.tagName=="TEXTAREA")wc(t);paint()}});
-document.addEventListener("change",e=>{const t=e.target;if(t.dataset&&t.dataset.q&&t.type=="radio"){ans[t.dataset.q]=t.value;save();paint()}
-  if(t.dataset&&t.dataset.au){const f=t.files[0];if(f){const a=$("#au"+t.dataset.au);a.src=URL.createObjectURL(f);a.load();}}});
+document.addEventListener("change",e=>{const t=e.target;if(t.dataset&&t.dataset.q&&t.type=="radio"){ans[t.dataset.q]=t.value;save();paint()}});
 
 /* nav */
 let cur=0;
@@ -255,7 +258,7 @@ $("#prev").onclick=()=>go(cur-1);$("#next").onclick=()=>go(cur+1);
 const done=id=>ans[id]!=null&&ans[id]!=="";
 function paint(){
   let h="";
-  ["L","R","W"].forEach(s=>{h+=`<h3>${SECS[s]}</h3><div class="pal">`;PAGES.forEach((p,k)=>{if(p.sec!=s)return;p.ids.forEach(id=>{h+=`<button class="pn${done(id)?" done":""}" data-pg="${k}">${s=="W"?id:id.slice(1)}</button>`})});h+="</div>"});
+  ["L","R","W"].forEach(s=>{h+=`<h3>${SECS[s]}</h3><div class="pal">`;PAGES.forEach((p,k)=>{if(p.sec!=s)return;p.ids.forEach(id=>{h+=`<button class="pn${pcls(id)}" data-pg="${k}">${s=="W"?id:id.slice(1)}</button>`})});h+="</div>"});
   $("#sheet").innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>Savollar xaritasi</b><button class="btn sm ghost" id="cls">✕</button></div>${h}<p><small>Ko'k — javob berilgan. Raqamga bosib o'sha qismga o'ting.</small></p>`;
   $("#cls").onclick=()=>$("#drawer").classList.remove("on");
   $("#sheet").querySelectorAll(".pn").forEach(b=>b.onclick=()=>go(+b.dataset.pg));
@@ -283,18 +286,39 @@ document.addEventListener("click",async e=>{
   }catch(err){alert("Mikrofonga ruxsat berilmadi yoki qurilma qo'llab-quvvatlamaydi.")}
 });
 
-/* finish */
+/* finish + auto-check */
+let graded=false;
+const TFNG_IDS=["R25","R26","R27","R28","R29"],TFNG_MAP={A:"True",B:"False",C:"Not Given"};
+const norm=x=>String(x==null?"":x).trim().toLowerCase().replace(/\s+/g," ").replace(/[.,;:!]+$/,"");
+const isOk=id=>{const u=norm(ans[id]);return u!==""&&(u===norm(KEY[id])||(ALT[id]||[]).some(v=>norm(v)===u))};
+const shown=(id,v)=>(v==null||v==="")?"—":(TFNG_IDS.includes(id)?v+" ("+TFNG_MAP[v]+")":v);
+const pcls=id=>graded&&KEY[id]!=null?(isOk(id)?" ok":" bad"):(done(id)?" done":"");
+function grade(){
+  const g={L:{ok:0,tot:0,bad:[],skip:0},R:{ok:0,tot:0,bad:[],skip:0}};
+  Object.keys(KEY).forEach(id=>{const s=id[0];g[s].tot++;if(isOk(id))g[s].ok++;else{g[s].bad.push(id);if(!done(id))g[s].skip++}});
+  return g;
+}
+const goTo=id=>{const k=PAGES.findIndex(p=>p.ids.includes(id));if(k>=0){$("#modal").classList.remove("on");go(k)}};
+const badList=(s,g)=>g[s].bad.length?`<details><summary>${SECS[s]} xatolari (${g[s].bad.length})</summary><ul class="wr">${g[s].bad.map(id=>`<li data-go="${id}"><b>${id.slice(1)}.</b> sizniki: <span class="x">${shown(id,ans[id])}</span> → to'g'ri: <b class="y">${shown(id,KEY[id])}</b></li>`).join("")}</ul></details>`:`<div>${SECS[s]}: xato yo'q 🎉</div>`;
 $("#finBtn").onclick=()=>{
-  let rows="",tot=0,got=0,kn=Object.keys(KEY).length;
-  ["L","R"].forEach(s=>{const ids=PAGES.filter(p=>p.sec==s).flatMap(p=>p.ids);const d=ids.filter(done).length;rows+=`<div>${SECS[s]}: <b>${d}/${ids.length}</b> javob berilgan</div>`});
-  const wd=["W1.1","W1.2","W2"].filter(done).length;rows+=`<div>Writing: <b>${wd}/3</b> task yozilgan</div>`;
-  let score="";
-  if(kn){Object.keys(KEY).forEach(id=>{tot++;if(String(ans[id]||"").toLowerCase()==String(KEY[id]).toLowerCase())got++});score=`<div class="sc">${got} / ${tot}</div><small>Kalit bo'yicha to'g'ri javoblar</small>`}
-  $("#mbox").innerHTML=`<h3 style="margin:0">Test yakuni</h3>${rows}${score}<small>Vaqt: ${$("#timer").textContent.slice(2)}</small><button class="btn" id="dl">⬇ Javoblarni yuklab olish (.txt)</button><button class="btn ghost" id="rs">🗑 Hammasini tozalash</button><button class="btn ghost" id="mc">Yopish</button>`;
+  const g=grade(),ok=g.L.ok+g.R.ok,tot=g.L.tot+g.R.tot,skip=g.L.skip+g.R.skip;
+  const wd=["W1.1","W1.2","W2"].filter(done).length;
+  graded=true;paint();
+  $("#mbox").innerHTML=`<h3 style="margin:0">Test natijasi</h3><div class="sc">${ok} / ${tot}</div><small>${Math.round(ok/tot*100)}% to'g'ri${skip?` · javobsiz: ${skip}`:""}</small>
+  <div>🎧 Listening: <b>${g.L.ok}/${g.L.tot}</b></div><div>📖 Reading: <b>${g.R.ok}/${g.R.tot}</b></div>
+  <div>✍️ Writing: <b>${wd}/3</b> task yozilgan <small>(qo'lda tekshiriladi)</small></div>
+  ${badList("L",g)}${badList("R",g)}
+  <small>Vaqt: ${$("#timer").textContent.slice(2)} · Xatoga bossangiz o'sha savolga o'tadi.</small>
+  <button class="btn" id="dl">⬇ Natijalarni yuklab olish (.txt)</button><button class="btn ghost" id="rs">🗑 Hammasini tozalash</button><button class="btn ghost" id="mc">Yopish</button>`;
   $("#modal").classList.add("on");
+  $("#mbox").querySelectorAll("[data-go]").forEach(li=>li.onclick=()=>goTo(li.dataset.go));
   $("#mc").onclick=()=>$("#modal").classList.remove("on");
   $("#rs").onclick=()=>{if(confirm("Barcha javoblar o'chiriladi. Davom etasizmi?")){ans={};save();try{localStorage.removeItem("mock1_t")}catch(e){}location.reload()}};
-  $("#dl").onclick=()=>{let t="CEFR Mock Test 1 — javoblar\n\n";Object.keys(ans).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})).forEach(k=>t+=k+": "+ans[k]+"\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/plain"}));a.download="mock1-answers.txt";a.click()};
+  $("#dl").onclick=()=>{
+    let t=`CEFR Mock Test 1 — natijalar\nUmumiy: ${ok}/${tot}  (Listening ${g.L.ok}/${g.L.tot}, Reading ${g.R.ok}/${g.R.tot})\n\n`;
+    Object.keys(KEY).forEach(id=>{t+=`${id}: ${shown(id,ans[id])} ${isOk(id)?"✓":"✗  (to'g'ri: "+shown(id,KEY[id])+")"}\n`});
+    t+="\n--- Writing ---\n";["W1.1","W1.2","W2"].forEach(k=>{t+=`\n[${k}]\n${ans[k]||"(yozilmagan)"}\n`});
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/plain"}));a.download="mock1-natija.txt";a.click()};
 };
 
 restore();
