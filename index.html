@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CEFR Mock Test 1</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#1c2333;--mute:#667085;--line:#dfe3ec;--acc:#2563eb;--accbg:#e8efff;--ok:#16a34a;--okbg:#e7f7ec;--warn:#f59e0b;--hdr:#0f172a;--hdrink:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#0e131d;--card:#171e2c;--ink:#e8ecf4;--mute:#97a1b5;--line:#2a3347;--acc:#6b9bff;--accbg:#1d2a4a;--ok:#4ade80;--okbg:#14301f;--hdr:#080c14}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:20;background:var(--hdr);color:var(--hdrink);padding:8px 14px 0;padding-top:max(8px,env(safe-area-inset-top))}
+.top{display:flex;align-items:center;gap:10px;max-width:1000px;margin:0 auto}
+.brand{font-weight:700;font-size:15px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.timer{font-variant-numeric:tabular-nums;background:#ffffff1f;border-radius:8px;padding:4px 10px;font-size:14px;cursor:pointer}
+.btn{border:0;border-radius:10px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer;background:var(--acc);color:#fff}
+.btn.ghost{background:transparent;color:inherit;border:1px solid var(--line)}
+.btn.sm{padding:5px 12px;font-size:14px}
+.hbtn{background:#ffffff1f;color:#fff;border:0;border-radius:8px;padding:5px 11px;font:inherit;font-size:14px;cursor:pointer}
+.tabs{display:flex;gap:4px;max-width:1000px;margin:6px auto 0;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1;min-width:max-content;border:0;background:transparent;color:#ffffffaa;padding:9px 14px;font:inherit;font-weight:600;cursor:pointer;border-bottom:3px solid transparent}
+.tab.on{color:#fff;border-bottom-color:var(--acc)}
+.sub{max-width:1000px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:7px 0;scrollbar-width:none}
+.sub::-webkit-scrollbar{display:none}
+.chip{min-width:max-content;border:1px solid #ffffff44;background:transparent;color:#ffffffcc;border-radius:999px;padding:3px 12px;font:inherit;font-size:13px;cursor:pointer}
+.chip.on{background:#fff;color:#0f172a;border-color:#fff}
+main{max-width:1000px;margin:0 auto;padding:16px 14px 120px}
+.page{display:none}.page.on{display:block}
+h2{font-size:22px;margin:4px 0 6px}
+.instr{background:var(--accbg);border-left:4px solid var(--acc);padding:10px 14px;border-radius:8px;margin:8px 0 16px;font-style:italic}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.q{padding:10px 0;border-bottom:1px dashed var(--line)}.q:last-child{border-bottom:0}
+.qt{margin:0 0 8px}
+.opts{display:grid;gap:7px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;background:var(--card)}
+.opt:hover{border-color:var(--acc)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .k{flex:none;width:26px;height:26px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-weight:700;font-size:13px}
+.opt:has(input:checked){border-color:var(--acc);background:var(--accbg)}
+.opt:has(input:checked) .k{background:var(--acc);color:#fff}
+.row-opts{display:flex;gap:8px;flex-wrap:wrap}.row-opts .opt{flex:1;min-width:92px;justify-content:center}
+.gap{border:0;border-bottom:2px solid var(--acc);background:var(--accbg);color:var(--ink);font:inherit;width:9.5em;max-width:100%;padding:1px 6px;border-radius:5px 5px 0 0;text-align:center}
+.gap:focus,select:focus,textarea:focus{outline:2px solid var(--acc);outline-offset:1px}
+.gw b{font-size:.85em;margin-right:3px}
+select{font:inherit;padding:8px 10px;border-radius:9px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);min-width:110px}
+.text p{margin:0 0 12px;text-align:justify;hyphens:auto}
+.text .quote{font-style:italic;border-left:3px solid var(--line);padding-left:12px}
+.audio{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:14px;display:grid;gap:8px}
+.audio .at{font-weight:700}.audio audio{width:100%}
+.file{justify-self:start;display:inline-block;padding:6px 12px;border:1px dashed var(--acc);color:var(--acc);border-radius:9px;font-weight:600;font-size:14px;cursor:pointer}
+.file input{display:none}
+small{color:var(--mute)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.job{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);display:flex;flex-direction:column;gap:8px}
+.job h4{margin:0}.job p{margin:0;font-size:15px}.job .pick{margin-top:auto;display:flex;align-items:center;gap:8px}
+.stm{list-style:none;padding:0;margin:0}.stm li{padding:5px 0;border-bottom:1px dashed var(--line)}.stm li:last-child{border:0}
+.map{width:100%;max-width:680px;display:block;margin:0 auto 10px}
+.map rect{fill:var(--card);stroke:var(--ink);stroke-width:1.5}
+.map text{fill:var(--ink);font-family:inherit;text-anchor:middle}
+.mapq{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.mapq label{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--card)}
+textarea{width:100%;min-height:150px;font:inherit;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);resize:vertical}
+.wc{font-size:13px;color:var(--mute);margin-top:4px}.wc.good{color:var(--ok);font-weight:600}
+blockquote{margin:0 0 12px;padding:10px 14px;border-left:4px solid var(--warn);background:var(--card);border-radius:8px;font-style:italic}
+.pics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.pic{aspect-ratio:4/3;border-radius:12px;display:grid;place-items:center;text-align:center;padding:10px;font-size:14px;color:#fff;background:linear-gradient(135deg,#38bdf8,#f59e0b)}
+.pic.b{background:linear-gradient(135deg,#a78bfa,#64748b)}.pic.c{background:linear-gradient(135deg,#fb923c,#334155)}
+.pic span{font-size:44px;display:block}
+ul.bl{margin:6px 0 0;padding-left:20px}
+.rec{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.rec audio{height:36px;max-width:100%}.rec .dot{width:10px;height:10px;border-radius:50%;background:#ef4444;animation:b 1s infinite;display:none}.rec.on .dot{display:inline-block}
+@keyframes b{50%{opacity:.2}}
+table.pc{width:100%;border-collapse:collapse;font-size:15px}
+table.pc th{background:#16a34a;color:#fff;padding:9px}table.pc td{border:1px solid var(--line);padding:10px;vertical-align:top}
+table.pc .h{background:#16a34a;color:#fff;text-align:center;font-weight:700}
+nav.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding:10px 14px;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+nav.bar>div{max-width:1000px;margin:0 auto;display:flex;gap:10px;align-items:center}
+nav.bar .mid{flex:1;text-align:center;font-size:14px;color:var(--mute)}
+nav.bar .btn[disabled]{opacity:.35}
+.drawer{position:fixed;inset:0;z-index:40;background:#0008;display:none}.drawer.on{display:block}
+.sheet{position:absolute;right:0;top:0;bottom:0;width:min(380px,92vw);background:var(--card);padding:16px;overflow:auto}
+.sheet h3{margin:14px 0 8px}.pal{display:flex;flex-wrap:wrap;gap:6px}
+.pn{width:38px;height:38px;border-radius:9px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
+.pn.done{background:var(--acc);border-color:var(--acc);color:#fff}
+.modal{position:fixed;inset:0;z-index:50;background:#000a;display:none;place-items:center;padding:14px}.modal.on{display:grid}
+.mbox{background:var(--card);border-radius:16px;padding:20px;max-width:460px;width:100%;display:grid;gap:10px}
+.sc{font-size:34px;font-weight:800;color:var(--acc)}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}.brand{font-size:14px}.pics{grid-template-columns:1fr 1fr}h2{font-size:20px}.text p{text-align:left}.gap{width:7.5em}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand">CEFR Mock Test 1</div>
+    <div class="timer" id="timer" title="Bosib to'xtatish">⏱ 00:00</div>
+    <button class="hbtn" id="palBtn">☰ Savollar</button>
+    <button class="hbtn" id="finBtn">Yakunlash</button>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div class="sub" id="sub"></div>
+</header>
+<main id="main"></main>
+<nav class="bar"><div>
+  <button class="btn ghost" id="prev">← Oldingi</button>
+  <div class="mid" id="mid"></div>
+  <button class="btn" id="next">Keyingi →</button>
+</div></nav>
+<div class="drawer" id="drawer"><div class="sheet" id="sheet"></div></div>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
+
+<script>
+/* ====== SOZLAMALAR ====== */
+// Audio fayllar yo'li (HTML bilan bir papkada audio/ ichiga qo'ying) yoki sahifada "Audio tanlash" tugmasi bilan yuklang
+const AUDIO={1:"audio/part1.mp3",2:"audio/part2.mp3",3:"audio/part3.mp3",4:"audio/part4.mp3",5:"audio/part5.mp3",6:"audio/part6.mp3"};
+// To'g'ri javoblar kaliti (ixtiyoriy). Masalan: {"L1":"B","L9":"museum","R21":"C"}  — to'ldirsangiz, Yakunlashda ball hisoblanadi
+const KEY={};
+/* ======================== */
+
+const $=s=>document.querySelector(s);
+const LET="ABCDEFGHIJ";
+let ans={};try{ans=JSON.parse(localStorage.getItem("mock1_ans")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("mock1_ans",JSON.stringify(ans))}catch(e){}};
+
+const mcq=(p,n,q,opts)=>{const id=p+n;return `<div class="q"><p class="qt"><b>${n}.</b> ${q}</p><div class="opts">${opts.map((o,i)=>`<label class="opt"><input type="radio" name="${id}" value="${LET[i]}" data-q="${id}"><span class="k">${LET[i]}</span><span>${o}</span></label>`).join("")}</div></div>`};
+const tfng=(p,n,q)=>{const id=p+n;return `<div class="q"><p class="qt"><b>${n}.</b> ${q}</p><div class="row-opts">${["True","False","Not Given"].map((o,i)=>`<label class="opt"><input type="radio" name="${id}" value="${LET[i]}" data-q="${id}"><span class="k">${LET[i]}</span><span>${o}</span></label>`).join("")}</div></div>`};
+const gp=(p,t)=>t.replace(/\[\[(\d+)\]\]/g,(_,n)=>`<span class="gw"><b>(${n})</b><input class="gap" data-q="${p}${n}" placeholder="${n}" autocomplete="off" autocapitalize="off" spellcheck="false"></span>`);
+const sel=(p,n,list)=>`<select data-q="${p}${n}"><option value="">—</option>${list.split("").map(c=>`<option>${c}</option>`).join("")}</select>`;
+const audioCard=n=>`<div class="audio"><div class="at">🎧 Listening — Part ${n} (audio)</div><audio controls preload="none" id="au${n}" src="${AUDIO[n]}"></audio><label class="file">📁 Audio fayl tanlash<input type="file" accept="audio/*" data-au="${n}"></label><small>Standart fayl nomi: ${AUDIO[n]}</small></div>`;
+const paras=a=>a.map(t=>`<p>${t}</p>`).join("");
+
+/* ---------- MAP ---------- */
+function mapSVG(){
+ const R=[["Medical\nCentre",8,6,71,89,0],["C",116,6,71,89,1],["Computer\nroom",187,6,72,55,0],["E",339,6,71,55,1],["Gym",410,6,71,55,0],["Baby\nCare room",481,6,72,55,0],
+ ["Games room",270,96,72,26,0],["A",270,122,72,39,1],["F",342,96,71,65,1],["B",481,129,72,66,1],["Sports\nHall",481,195,72,89,0],["D",8,196,71,88,1],["Reception",155,202,33,82,2],["G",188,202,151,82,1],["H",339,236,71,48,1],["Library",410,236,71,48,0]];
+ let s=`<svg class="map" viewBox="0 0 561 291" role="img" aria-label="Community centre plan"><rect x="8" y="6" width="545" height="278" style="fill:none;stroke-width:2.5"/>`;
+ R.forEach(([t,x,y,w,h,k])=>{
+  s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}"/>`;
+  const cx=x+w/2,cy=y+h/2;
+  if(k==1)s+=`<text x="${cx}" y="${cy+9}" font-size="26" font-weight="700">${t}</text>`;
+  else if(k==2)s+=`<text transform="translate(${cx+4},${cy}) rotate(-90)" font-size="11" font-weight="700">${t}</text>`;
+  else{const L=t.split("\n");L.forEach((l,i)=>{s+=`<text x="${cx}" y="${cy+4+(i-(L.length-1)/2)*13}" font-size="11" font-weight="700">${l}</text>`})}
+ });
+ return s+`</svg>`;
+}
+
+/* ---------- CONTENT ---------- */
+const GREAT=[
+ "The Great Wall of China is one of the most famous landmarks in the world. It was built to protect China from attacks. Construction of the wall began over two thousand years ago during the Qin Dynasty. Different dynasties added to the wall over time, making it longer and stronger. Today, the [[1]] stretches over 13,000 miles across mountains, deserts, and plains. The [[2]] of the wall is incredible, as it took millions of workers to build it. Many people call it the \"longest wall in the world.\"",
+ "The Great Wall was not just for defense. It also helped regulate trade along the Silk Road. Soldiers and guards also used the wall to [[3]] the movement of goods and people. Watchtowers were built to send signals in case of [[4]]. These towers gave the wall a better [[5]] system.",
+ "Parts of the wall have been restored, while others have crumbled over the years. Tourists from around the world visit to see this ancient structure. Some sections are steep and hard to climb, but the view from the top is worth the effort. The Great Wall is a symbol of China's unity and strength. It shows how [[6]] people worked together to achieve something great. This remarkable monument continues to amaze people today."];
+const JOBS=[
+ [7,"Junior Graphic Designer","We are a fast-growing marketing agency looking for a creative individual to join our team. This is an entry-level position, so professional experience is not a prerequisite, but a strong portfolio demonstrating your design skills is essential. Full training on our software suite will be provided. Must be a team player."],
+ [8,"Part-Time Barista","Our friendly neighbourhood coffee shop needs a barista for morning shifts (7 am - 12 pm), Monday to Friday. The ideal candidate will have excellent customer service skills and a passion for coffee. Previous experience is a plus but not required, as we are happy to train the right person."],
+ [9,"Senior Backend Developer","A leading tech firm is seeking an experienced developer to lead our server-side engineering team. Candidates must have a minimum of 8 years of experience with Python and cloud infrastructure (AWS/Azure). This is a leadership role that involves mentoring junior developers and architecting new systems."],
+ [10,"Weekend Event Staff","We run large-scale public events (concerts, festivals) and require reliable staff for weekend work. Duties include ticket scanning, guiding attendees, and light setup/cleanup. This is a flexible, seasonal role, perfect for those looking to earn extra money on Saturdays and Sundays."],
+ [11,"Clinical Research Associate","A pharmaceutical company is hiring a professional with a background in nursing or a related medical field. The role involves monitoring clinical trials, ensuring patient safety, and managing data. A degree in life sciences and at least 3 years of experience in a hospital or research setting are required."],
+ [12,"Foreign Language Content Reviewer","We need fluent speakers of German or French to review and edit translated documents for accuracy and cultural appropriateness. This is a remote, project-based role. You must be a native-level speaker of the target language and have a keen eye for detail."],
+ [13,"Logistics Coordinator","A busy shipping company is looking for an organized individual to manage schedules, track shipments, and communicate with drivers. Experience in logistics or supply chain management is highly desirable. Must be proficient with office software and able to solve problems under pressure."],
+ [14,"Childminder / Nanny","A family is looking for a caring and responsible person to look after their two children (ages 4 and 7) after school. Responsibilities include school pick-up, preparing snacks, and helping with homework. Must have a clean driving record and previous childcare experience."]];
+const STM=["You are a university student looking for a job you can do on Saturdays and Sundays.","You are a parent who needs someone to care for your young children in the afternoons.","You have just graduated with a design degree and have a great collection of your work, but no job history.","You are a native French speaker looking for flexible work you can do from home.","You are a highly experienced software architect with strong management skills.","You want a weekday job that finishes by noon so you can have your afternoons free.","You are a former nurse with several years of experience working in a hospital.","You have a talent for organization and have previously worked for a delivery company.","You are a skilled builder with over ten years of experience in the construction industry.","You have been working as a primary school teacher for the last five years."];
+const HEAD=["A summary of the decree inscribed on the stone","The far-reaching consequences of the discovery","An accidental find of major significance","A feature that provided the essential key","Ongoing debate over the object's rightful home","An analysis of the stone's geological composition","Acknowledging a principal figure's success","The specific strategy that unlocked the code"];
+const ROS=[
+ "In 1799, during Napoleon's campaign in Egypt, a French soldier named Pierre-François Bouchard made an unexpected discovery in the town of Rosetta. He found a large, dark stone slab inscribed with text. Recognizing its potential importance, the slab was secured. It was immediately clear that this was no ordinary artifact, as it appeared to contain the same text written in three different scripts, presenting a linguistic puzzle that had confused scholars for centuries.",
+ "The true value of the Rosetta Stone lay in its trilingual inscription. The top section was written in Ancient Egyptian hieroglyphs, the script of monuments and religious texts which no one at the time could read. The middle section was in Demotic, a more common script used in ancient Egypt for everyday purposes. The bottom section was in Ancient Greek, a language that was well understood by scholars. It was this trilingual format that provided the pivotal clue for finally decoding the lost language of the pharaohs.",
+ "For over two decades, many scholars attempted to decipher the hieroglyphs with limited success. The final breakthrough came from a young French scholar named Jean-François Champollion. He had dedicated his life to the study of ancient Egypt and, in 1822, he announced his success. By building on the work of others and applying his own profound knowledge of Coptic (a language descended from Ancient Egyptian), he was able to unlock the secrets of the hieroglyphic script.",
+ "Champollion's method was both systematic and brilliant. He hypothesized that the hieroglyphs enclosed in oval shapes, known as cartouches, represented the names of royal figures. By comparing the Greek names of pharaohs like Ptolemy and Cleopatra with the hieroglyphs in the corresponding cartouches, he was able to assign phonetic values to many of the hieroglyphic symbols. This phonetic approach, rather than treating each symbol as a picture of a word, was the crucial step that allowed the entire system to be understood.",
+ "The decipherment of the Rosetta Stone was a watershed moment in history. It didn't just allow one text to be read; it opened the door to understanding thousands of other inscriptions and papyri from ancient Egypt. For the first time, historians could read the history, literature, and religious beliefs of the Egyptians in their own words. This single discovery essentially gave birth to the entire field of modern Egyptology and unveiled the complexities of a civilization that had been silent for nearly two millennia.",
+ "After the defeat of the French forces in Egypt in 1801, the Rosetta Stone was transferred to British possession under the terms of a treaty. It has been on public display at the British Museum in London since 1802, where it remains the single most visited object. However, its location is a source of ongoing contention, with Egyptian authorities and cultural heritage groups frequently calling for its repatriation to Egypt, arguing it is a vital piece of their national heritage."];
+const DAY=[
+ "In today's busy society, people often see daydreaming as a waste of time — a sign that someone is lazy or unable to focus. From classrooms to workplaces, being caught staring into space is usually considered a bad habit that needs to be corrected. However, recent research suggests that allowing our minds to wander freely might actually have important benefits for creativity, problem-solving, and emotional well-being.",
+ "For many years, psychologists believed that daydreaming prevented people from concentrating on real-world tasks. But a growing number of scientists now argue that the human brain is never completely at rest. Even when we are not focused on anything in particular, a network in our brain known as the default mode network becomes active. This system is responsible for imagination, self-reflection, and connecting different ideas — all of which are essential for innovative thinking.",
+ "Dr. Kalina Christoff, a neuroscientist at the University of British Columbia, has studied the brain activity of people while they daydream. Her research shows that moments of mental drifting can help the brain make unexpected connections, leading to sudden insights. She explains that when the mind is allowed to move freely from one thought to another, it can link distant memories or ideas in original ways — a process that structured, focused thinking often prevents.",
+ "To explore this idea further, a group of psychologists conducted an experiment in which participants were asked to perform a creative task after either resting quietly or doing a simple, repetitive activity such as sorting colored paperclips. Those who had a chance to let their minds wander during the dull activity produced more imaginative ideas than those who didn't. According to the researchers, these results indicate that mild mental distraction gives the subconscious mind time to process information in the background.",
+ "Moreover, daydreaming might also play a role in emotional balance. When people think about their goals, memories, or relationships during idle moments, they are engaging in a kind of mental rehearsal that can prepare them for future situations. In moderation, this helps individuals reflect on feelings and build empathy. However, experts inform that too much or negative daydreaming — for instance, repeatedly imagining stressful or unrealistic scenarios — can lead to anxiety or dissatisfaction.",
+ "In the modern world, where people are constantly connected to screens and notifications, genuine mental pauses have become rare. Psychologists suggest that taking short breaks without digital distractions can help restore mental energy and reduce stress. So, rather than trying to eliminate daydreaming, perhaps we should embrace it as a natural and valuable function of the mind."];
+const TEL=[
+ "The paradigm of the traditional workplace is undergoing a seismic shift. Telecommuting, once a niche arrangement, has become increasingly prevalent across numerous sectors. Industries from technology to legal philosophy are progressively embracing flexible work models, permitting staff to operate remotely, at least on a hybrid basis. Nevertheless, the once-futuristic prophecy of near-vacant office buildings—populated only by essential maintenance or on-site personnel—remains a distant reality.",
+ "The tangible merits for employers are compelling. A distributed workforce mitigates the necessity for vast, costly office real estate. Furthermore, empirical data suggests a significant uptick in output. North American studies, for instance, indicate that remote employees can be 30-40% more prolific. Manager James Horgan posits that this surge is partially attributable to the elimination of the arduous daily commute. ‘Our findings revealed a pattern of reinvestment; the time recuperated from travel was largely channeled back into professional tasks,’ Horgan explains.",
+ "<span class='quote'>‘This new-found autonomy was highly valued, and in a gesture of reciprocity, employees demonstrated their commitment through heightened productivity.’</span>",
+ "Beyond productivity, offering remote work serves as a powerful tool for talent acquisition and retention. The societal dividends are equally profound. Telecommuting fosters greater workforce inclusivity, democratizing access to employment for demographics that have historically faced barriers. This includes not only primary caregivers for the elderly or infirm, but also individuals with disabilities and those residing in geographically isolated regions. An ancillary benefit is the potential for enhanced civic engagement, as the temporal flexibility afforded by remote work allows individuals to participate more fully in local community life.",
+ "The endurance of the physical office, however, is rooted in more than mere tradition. Many organizations contend that the serendipitous collaboration and rapid innovation that fuel growth are best fostered in a shared environment. The organic process of mentorship, whereby junior staff absorb professional nuances through informal observation—a kind of corporate osmosis—is notoriously difficult to replicate virtually. The office thus remains a crucial crucible for forging company culture and a tangible sense of collective identity, elements that risk dilution within a fully atomized workforce.",
+ "However, this model is not without its detriments. A significant portion of the remote workforce grapples with feelings of isolation and the absence of the spontaneous, collegial camaraderie inherent in a physical office. Moreover, the erosion of clear boundaries between professional duties and personal time can make achieving a sustainable work-life equilibrium challenging. Consequently, it is incumbent upon employers to implement proactive support structures, such as regular virtual team-building activities and robust mental wellness programs, to ensure their distributed teams remain cohesive, motivated, and psychologically sound."];
+
+const rec=k=>`<div class="rec" data-rec="${k}"><button class="btn sm" data-recbtn="${k}">🎙 Yozib olish</button><span class="dot"></span><audio controls hidden></audio></div>`;
+
+/* ---------- PAGES ---------- */
+const PAGES=[
+{sec:"L",p:"L",title:"Part 1",from:1,to:8,aud:1,instr:"You will hear some sentences. You will hear each sentence twice. Choose the correct reply to each sentence (A, B, or C).",html:()=>`<div class="card">${[
+ ["Me too.","Can you?","Sure, you can."],["Take bus 6.","It starts at 9 a.m. tomorrow.","It's in the center."],["OK, here it is.","No, that doesn't suit you.","Sure, I'll wait here."],["In the school library.","Since 1997.","Before I was born."],["You should take a short break.","Let's get to work right now!","Don't worry, they haven't."],["How about an ice-cream?","You need to wear your sweater.","Let's eat some fresh pizza and chips."],["When does it happen?","Where did you see that?","Who told you that?"],["My hands are also firm.","Sounds like a boring person.","Can you expect anything?"]].map((o,i)=>mcq("L",i+1,"",o)).join("")}</div>`},
+{sec:"L",p:"L",title:"Part 2",from:9,to:14,aud:2,instr:"You will hear someone giving a talk. For each question, fill in the missing information in the numbered space. Write ONE WORD and / or A NUMBER for each answer.",html:()=>`<div class="card"><h3 style="margin-top:0">School trip</h3><ul class="bl"><li>Teacher's name: <b><u>Turner</u></b></li>${["They will visit by [[9]]","The first activity they walk around [[10]]","Students spend their free time in the [[11]]","The lunch will be at [[12]] together","They will visit a [[13]]","They should bring a [[14]]."].map(t=>`<li style="margin:10px 0">${gp("L",t)}</li>`).join("")}</ul></div>`},
+{sec:"L",p:"L",title:"Part 3",from:15,to:18,aud:3,instr:"You will hear people speaking in different situations. Match each speaker (1-4) to the place they are at (A-F). There are TWO EXTRA options which you do not need to use.",html:()=>`<div class="card"><div class="grid2"><div>${[15,16,17,18].map((n,i)=>`<div class="q"><b>${n}.</b> Speaker ${i+1} … ${sel("L",n,"ABCDEF")}</div>`).join("")}</div><ul class="stm">${["In a swimming pool","At home","In a shopping centre","In a garden","In a restaurant","In a classroom"].map((t,i)=>`<li><b>${LET[i]})</b> ${t}</li>`).join("")}</ul></div></div>`},
+{sec:"L",p:"L",title:"Part 4",from:19,to:23,aud:4,instr:"You will hear someone giving a talk. Label the places (19-23) on the map (A-H). There are THREE extra options which you do not need to use.",html:()=>`<div class="card"><h3 style="text-align:center;margin-top:0">COMMUNITY CENTRE PLAN</h3>${mapSVG()}<div class="mapq">${[[19,"Bike racks"],[20,"Kitchen room"],[21,"Music room"],[22,"Shower room"],[23,"Restroom"]].map(([n,t])=>`<label><span><b>${n}.</b> ${t}</span>${sel("L",n,"ABCDEFGH")}</label>`).join("")}</div></div>`},
+{sec:"L",p:"L",title:"Part 5",from:24,to:29,aud:5,instr:"You will hear three extracts. Choose the correct answer (A, B or C) for each question (24-29). There are TWO questions for each extract.",html:()=>`<div class="card"><h3 style="margin-top:0">Extract One</h3><p><i>You hear a man and a woman discussing a new facility in their neighborhood.</i></p>${mcq("L",24,"What is the main conversation about?",["A new library and its features","A recent community event","Renovations at the local museum"])}${mcq("L",25,"What is the woman concerned about?",["The lack of seating","There are too many people in the evenings","The opening hours are too short"])}</div><div class="card"><h3 style="margin-top:0">Extract Two</h3><p><i>You hear two friends talking about a coffee shop they visited.</i></p>${mcq("L",26,"What is the main conversation about?",["The menu options at a café","The location of a popular café","The size and atmosphere of a new coffee shop"])}${mcq("L",27,"What did the man say about the new coffee shop?",["The service was slower","The prices were higher","The staff weren't friendlier"])}</div><div class="card"><h3 style="margin-top:0">Extract Three</h3><p><i>You hear a conversation between two people discussing pets.</i></p>${mcq("L",28,"What is the main conversation about?",["The difficulty of taking care of a pet animal","Choosing the right breed for a family","Training a dog to behave indoors"])}${mcq("L",29,"What was the woman's recommendation?",["Going for a smaller one","Buying a pet from a shelter","Hiring a professional trainer"])}</div>`},
+{sec:"L",p:"L",title:"Part 6",from:30,to:35,aud:6,instr:"You will hear a part of a lecture. For each question, fill in the missing information in the numbered space. Write no more than ONE WORD for each answer.",html:()=>`<div class="card"><h3 style="margin-top:0">MARKETING AND BRANDING</h3><ul class="bl">${["A strong brand can help a company dominate its [[30]].","Apple products are considered more valuable because of their high [[31]].","Many brands focus less on selling logic and more on selling [[32]].","After drinking Coca-Cola, customers don't notice the ingredients but experience a feeling of [[33]].","Online businesses track customer preferences using [[34]] history.","This data helps improve both the customer experience and overall [[35]]."].map(t=>`<li style="margin:12px 0">${gp("L",t)}</li>`).join("")}</ul></div>`},
+
+{sec:"R",p:"R",title:"Part 1",from:1,to:6,instr:"Read the text. Fill in each gap with ONE word. You must use a word which is somewhere in the rest of the text.",html:()=>`<div class="card text"><h3 style="margin-top:0;text-align:center">THE GREAT WALL OF CHINA</h3>${GREAT.map(t=>`<p style="line-height:2.1">${gp("R",t)}</p>`).join("")}</div>`},
+{sec:"R",p:"R",title:"Part 2",from:7,to:14,instr:"Read the texts 7-14 and the statements A-J. Decide which text matches with the situation described in the statements. Each statement can be used ONCE only. There are TWO extra statements which you do not need to use.",html:()=>`<div class="card"><ul class="stm">${STM.map((t,i)=>`<li><b>${LET[i]}.</b> ${t}</li>`).join("")}</ul></div><div class="grid2">${JOBS.map(([n,t,d])=>`<div class="job"><h4>${n}. ${t}</h4><p>${d}</p><div class="pick"><b>Statement:</b>${sel("R",n,"ABCDEFGHIJ")}</div></div>`).join("")}</div>`},
+{sec:"R",p:"R",title:"Part 3",from:15,to:20,instr:"Read the text and choose the correct heading for each paragraph from the list of headings below. There are more headings than paragraphs, so you will not use all of them. You cannot use any heading more than once.",html:()=>`<div class="card"><h3 style="margin-top:0;text-align:center">LIST OF HEADINGS</h3><ul class="stm">${HEAD.map((t,i)=>`<li><b>${LET[i]})</b> ${t}</li>`).join("")}</ul></div><div class="card text"><h3 style="margin-top:0;text-align:center">THE ROSETTA STONE</h3>${ROS.map((t,i)=>`<p><b>${["I","II","III","IV","V","VI"][i]}.</b> ${t}</p><p style="margin-top:-4px"><b>${15+i}. Paragraph ${["I","II","III","IV","V","VI"][i]}</b> &nbsp;${sel("R",15+i,"ABCDEFGH")}</p><hr style="border:0;border-top:1px dashed var(--line);margin:12px 0">`).join("")}</div>`},
+{sec:"R",p:"R",title:"Part 4",from:21,to:29,instr:"Read the following text for questions 21-29.",html:()=>`<div class="card text"><h3 style="margin-top:0;text-align:center">DAYDREAMING</h3>${paras(DAY)}</div><div class="card"><p class="instr" style="margin-top:0">For questions 21-24, choose the correct answer A, B, C, or D.</p>${mcq("R",21,"What was traditionally believed about daydreaming?",["It improves people's ability to concentrate.","It is a sign of deep thinking and self-awareness.","It stops people from focusing properly on tasks.","It helps people become more productive at work."])}${mcq("R",22,"According to Dr. Christoff, what happens when the mind drifts?",["It becomes unable to connect different ideas.","It finds creative links between thoughts and memories.","It stops processing information altogether.","It repeats the same thought patterns endlessly."])}${mcq("R",23,"What did the experiment involving paperclips demonstrate?",["Daydreaming reduces people's ability to think logically.","Repetitive tasks increase stress and anxiety.","Focused concentration produces better ideas.","A relaxed mental state can enhance creativity."])}${mcq("R",24,"What warning do experts give about daydreaming?",["It can have harmful effects if done excessively.","It always results in emotional stability.","It is less effective than using digital tools.","It should be avoided during leisure activities."])}</div><div class="card"><p class="instr" style="margin-top:0">For questions 25-29, decide if the following statements agree with the information given in the text.</p>${tfng("R",25,"The default mode network becomes inactive when people are daydreaming.")}${tfng("R",26,"Dr. Christoff's research proves that daydreaming increases intelligence levels.")}${tfng("R",27,"Participants who did a boring activity before the creative task failed to generate more unique ideas.")}${tfng("R",28,"Excessive daydreaming can sometimes contribute to adverse emotions.")}${tfng("R",29,"The writer suggests that technology use has reduced opportunities for genuine mental rest.")}</div>`},
+{sec:"R",p:"R",title:"Part 5",from:30,to:35,instr:"Read the following text for questions 30-35.",html:()=>`<div class="card text"><h3 style="margin-top:0;text-align:center">THE TELECOMMUTING PARADIGM</h3>${TEL.map(t=>t.startsWith("<span")?`<p>${t}</p>`:`<p>${t}</p>`).join("")}</div><div class="card"><p class="instr" style="margin-top:0">For questions 30-33, fill in the missing information in the numbered spaces. Write no more than ONE WORD and / or A NUMBER for each question.</p><h3 style="text-align:center">THE RISE OF REMOTE WORK</h3><p style="line-height:2.1">${gp("R","The practice of telecommuting is now common in various fields, including the technology and [[30]] sectors. For companies, a key advantage is a reduced need for physical office space. For employees, productivity can see a significant surge of up to [[31]] percent. This increase is partly explained by the removal of the daily [[32]], with the saved time often being redirected into work. From a societal perspective, remote work promotes inclusivity by opening up job opportunities for groups such as caregivers and people living in [[33]] areas.")}</p></div><div class="card"><p class="instr" style="margin-top:0">For questions 34-35, choose the correct answer A, B, C, or D.</p>${mcq("R",34,"According to the text, what is a key psychological driver behind the increased productivity of remote workers?",["They face fewer interruptions from colleagues compared to an office environment.","They feel a sense of obligation to repay the company for the flexibility it provides.","Their performance is more easily and accurately measured through digital tools.","They have access to superior and more personalized technology in their home offices."])}${mcq("R",35,"What does the author imply is a crucial responsibility for companies with a remote workforce?",["To subsidize the cost of home office equipment for all employees.","To actively prevent the potential for employee burnout through targeted support.","To decrease reliance on virtual meetings to combat screen fatigue.","To ensure all employees have equal access to high-speed internet."])}</div>`},
+
+{sec:"W",p:"W",title:"Writing",ids:["W1.1","W1.2","W2"],instr:"Complete all tasks. Word counters show your progress.",html:()=>`<div class="card"><blockquote><b>You are a student at a school that is planning to change the canteen menu. You received an email from the canteen manager.</b><br>Dear Student,<br>We are currently reviewing the school canteen menu and would like to include healthier and more popular food options. What types of food would you like to see more of? Are there any meals or snacks we should remove or improve?<br>Your feedback is important to us.<br>Best regards,<br>Canteen Manager</blockquote></div>
+<div class="card"><h3 style="margin-top:0">Task 1.1</h3><p>Write a short email to your friend (who also eats at the school canteen).<br>Say what you think about the food and what changes you would like to see in the menu.<br><b>Write about 50 words.</b></p><textarea data-q="W1.1" data-min="40" data-max="60" placeholder="Dear …"></textarea><div class="wc"></div></div>
+<div class="card"><h3 style="margin-top:0">Task 1.2</h3><p>Write an email to the canteen manager.<br>Give your opinion about the current canteen menu and suggest improvements.<br>Mention what kind of food should be added or removed and explain why.<br><b>Write 120–150 words.</b></p><textarea data-q="W1.2" data-min="120" data-max="150" placeholder="Dear Manager, …" style="min-height:220px"></textarea><div class="wc"></div></div>
+<div class="card"><h3 style="margin-top:0">Task 2</h3><p>You are participating in an online discussion for language learners.<br>The question is: <i>"Some schools require students to wear uniforms, while others allow casual clothes. Do you think wearing a uniform is a good idea?"</i><br>Post your response, giving reasons and examples.<br><b>Write 180-200 words.</b></p><textarea data-q="W2" data-min="180" data-max="200" placeholder="I think …" style="min-height:280px"></textarea><div class="wc"></div></div>`},
+
+{sec:"S",p:"S",title:"Speaking",ids:[],instr:"Speak aloud. You can record yourself and listen back (microphone permission is required).",html:()=>`<div class="card"><h3 style="margin-top:0">PART 1.1</h3><ul class="bl"><li><b>What do you usually do in your free time?</b></li><li><b>Do you enjoy sports?</b></li><li><b>How often do you go to the gym?</b></li></ul>${rec("1.1")}</div>
+<div class="card"><h3 style="margin-top:0">PART 1.2</h3><div class="pics"><div class="pic"><div><span>🏖️👨‍👩‍👧</span>Picture 1 — family on the beach</div></div><div class="pic b"><div><span>🧑‍🤝‍🧑🎉</span>Picture 2 — friends having fun at home</div></div></div><ul class="bl"><li><b>Tell me what you can see in these two pictures.</b></li><li><b>What are the benefits of spending time with friends?</b></li><li><b>Is it important to make friends?</b></li></ul>${rec("1.2")}</div>
+<div class="card"><h3 style="margin-top:0">PART 2</h3><div class="pics"><div class="pic c"><div><span>🎸💻</span>Man learning guitar with a laptop</div></div><ul class="bl" style="align-self:center"><li><b>Tell me about the time when you learned a new skill.</b></li><li><b>What was it and how did you learn it?</b></li><li><b>What kinds of skills are most useful in today's world?</b></li></ul></div>${rec("2")}</div>
+<div class="card"><h3 style="margin-top:0">PART 3</h3><table class="pc"><tr><td class="h" colspan="2">SOCIAL MEDIA HAS A NEGATIVE IMPACT ON SOCIETY</td></tr><tr><th>Pros:</th><th>Cons:</th></tr><tr><td><ul class="bl"><li>Social media helps people stay connected around the world, making it easier to stay connected with others.</li><li>It provides a platform for sharing information, promoting causes, and raising awareness.</li><li>It can be a tool for entertainment, education, and networking.</li></ul></td><td><ul class="bl"><li>Social media can contribute to feelings of isolation or loneliness.</li><li>It can be a source of misinformation or fake news.</li><li>It can negatively impact mental health, leading to issues like anxiety or low self-esteem.</li></ul></td></tr></table>${rec("3")}</div>`}
+];
+const SECS={L:"Listening",R:"Reading",W:"Writing",S:"Speaking"};
+
+/* ---------- BUILD ---------- */
+const main=$("#main");
+PAGES.forEach((pg,i)=>{
+  pg.ids=pg.ids||Array.from({length:pg.to-pg.from+1},(_,k)=>pg.p+(pg.from+k));
+  const el=document.createElement("section");el.className="page";el.id="pg"+i;
+  const label=pg.sec=="L"||pg.sec=="R"?`${SECS[pg.sec]} — ${pg.title}`:SECS[pg.sec];
+  const range=pg.from?` <small>(Questions ${pg.from}–${pg.to})</small>`:"";
+  el.innerHTML=`<h2>${label}${range}</h2><div class="instr">${pg.instr}</div>${pg.aud?audioCard(pg.aud):""}${pg.html()}`;
+  main.appendChild(el);pg.el=el;
+});
+const tabs=$("#tabs"),sub=$("#sub");
+Object.keys(SECS).forEach(k=>{const b=document.createElement("button");b.className="tab";b.textContent=SECS[k];b.dataset.s=k;b.onclick=()=>go(PAGES.findIndex(p=>p.sec==k));tabs.appendChild(b)});
+
+/* restore answers */
+function restore(){document.querySelectorAll("[data-q]").forEach(e=>{const v=ans[e.dataset.q];if(v==null)return;if(e.type=="radio")e.checked=e.value==v;else{e.value=v;}});document.querySelectorAll("textarea[data-q]").forEach(wc)}
+function wc(t){const n=(t.value.trim().match(/\S+/g)||[]).length,d=t.nextElementSibling;const mn=+t.dataset.min,mx=+t.dataset.max;d.textContent=`${n} words (target ${mn}–${mx})`;d.className="wc"+(n>=mn&&n<=mx?" good":"")}
+document.addEventListener("input",e=>{const t=e.target;if(t.dataset&&t.dataset.q&&t.type!="radio"){ans[t.dataset.q]=t.value.trim();save();if(t.tagName=="TEXTAREA")wc(t);paint()}});
+document.addEventListener("change",e=>{const t=e.target;if(t.dataset&&t.dataset.q&&t.type=="radio"){ans[t.dataset.q]=t.value;save();paint()}
+  if(t.dataset&&t.dataset.au){const f=t.files[0];if(f){const a=$("#au"+t.dataset.au);a.src=URL.createObjectURL(f);a.load();}}});
+
+/* nav */
+let cur=0;
+function go(i){
+  cur=Math.max(0,Math.min(PAGES.length-1,i));
+  document.querySelectorAll("audio").forEach(a=>a.pause());
+  PAGES.forEach((p,k)=>p.el.classList.toggle("on",k==cur));
+  const pg=PAGES[cur];
+  tabs.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.s==pg.sec));
+  sub.innerHTML="";
+  PAGES.forEach((p,k)=>{if(p.sec==pg.sec&&(p.sec=="L"||p.sec=="R")){const b=document.createElement("button");b.className="chip"+(k==cur?" on":"");b.textContent=p.title;b.onclick=()=>go(k);sub.appendChild(b)}});
+  sub.style.display=sub.children.length?"flex":"none";
+  $("#prev").disabled=cur==0;$("#next").disabled=cur==PAGES.length-1;
+  $("#mid").textContent=`${SECS[pg.sec]}${pg.sec=="L"||pg.sec=="R"?" · "+pg.title:""}  (${cur+1}/${PAGES.length})`;
+  try{localStorage.setItem("mock1_pg",cur)}catch(e){}
+  window.scrollTo({top:0});paint();$("#drawer").classList.remove("on");
+}
+$("#prev").onclick=()=>go(cur-1);$("#next").onclick=()=>go(cur+1);
+
+/* palette */
+const done=id=>ans[id]!=null&&ans[id]!=="";
+function paint(){
+  let h="";
+  ["L","R","W"].forEach(s=>{h+=`<h3>${SECS[s]}</h3><div class="pal">`;PAGES.forEach((p,k)=>{if(p.sec!=s)return;p.ids.forEach(id=>{h+=`<button class="pn${done(id)?" done":""}" data-pg="${k}">${s=="W"?id:id.slice(1)}</button>`})});h+="</div>"});
+  $("#sheet").innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><b>Savollar xaritasi</b><button class="btn sm ghost" id="cls">✕</button></div>${h}<p><small>Ko'k — javob berilgan. Raqamga bosib o'sha qismga o'ting.</small></p>`;
+  $("#cls").onclick=()=>$("#drawer").classList.remove("on");
+  $("#sheet").querySelectorAll(".pn").forEach(b=>b.onclick=()=>go(+b.dataset.pg));
+}
+$("#palBtn").onclick=()=>$("#drawer").classList.add("on");
+$("#drawer").onclick=e=>{if(e.target.id=="drawer")$("#drawer").classList.remove("on")};
+
+/* timer */
+let sec=+(localStorage.getItem("mock1_t")||0),run=true;
+const tick=()=>{const m=String(Math.floor(sec/60)).padStart(2,"0"),s=String(sec%60).padStart(2,"0");$("#timer").textContent=(run?"⏱ ":"⏸ ")+m+":"+s};
+setInterval(()=>{if(run){sec++;try{localStorage.setItem("mock1_t",sec)}catch(e){}tick()}},1000);
+$("#timer").onclick=()=>{run=!run;tick()};tick();
+
+/* recorder */
+const recs={};
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-recbtn]");if(!b)return;
+  const k=b.dataset.recbtn,box=b.parentElement;
+  if(recs[k]&&recs[k].state=="recording"){recs[k].stop();return}
+  try{
+    const st=await navigator.mediaDevices.getUserMedia({audio:true}),mr=new MediaRecorder(st),ch=[];
+    mr.ondataavailable=x=>ch.push(x.data);
+    mr.onstop=()=>{st.getTracks().forEach(t=>t.stop());const a=box.querySelector("audio");a.src=URL.createObjectURL(new Blob(ch,{type:mr.mimeType}));a.hidden=false;box.classList.remove("on");b.textContent="🎙 Qayta yozish"};
+    mr.start();recs[k]=mr;box.classList.add("on");b.textContent="⏹ To'xtatish";
+  }catch(err){alert("Mikrofonga ruxsat berilmadi yoki qurilma qo'llab-quvvatlamaydi.")}
+});
+
+/* finish */
+$("#finBtn").onclick=()=>{
+  let rows="",tot=0,got=0,kn=Object.keys(KEY).length;
+  ["L","R"].forEach(s=>{const ids=PAGES.filter(p=>p.sec==s).flatMap(p=>p.ids);const d=ids.filter(done).length;rows+=`<div>${SECS[s]}: <b>${d}/${ids.length}</b> javob berilgan</div>`});
+  const wd=["W1.1","W1.2","W2"].filter(done).length;rows+=`<div>Writing: <b>${wd}/3</b> task yozilgan</div>`;
+  let score="";
+  if(kn){Object.keys(KEY).forEach(id=>{tot++;if(String(ans[id]||"").toLowerCase()==String(KEY[id]).toLowerCase())got++});score=`<div class="sc">${got} / ${tot}</div><small>Kalit bo'yicha to'g'ri javoblar</small>`}
+  $("#mbox").innerHTML=`<h3 style="margin:0">Test yakuni</h3>${rows}${score}<small>Vaqt: ${$("#timer").textContent.slice(2)}</small><button class="btn" id="dl">⬇ Javoblarni yuklab olish (.txt)</button><button class="btn ghost" id="rs">🗑 Hammasini tozalash</button><button class="btn ghost" id="mc">Yopish</button>`;
+  $("#modal").classList.add("on");
+  $("#mc").onclick=()=>$("#modal").classList.remove("on");
+  $("#rs").onclick=()=>{if(confirm("Barcha javoblar o'chiriladi. Davom etasizmi?")){ans={};save();try{localStorage.removeItem("mock1_t")}catch(e){}location.reload()}};
+  $("#dl").onclick=()=>{let t="CEFR Mock Test 1 — javoblar\n\n";Object.keys(ans).sort((a,b)=>a.localeCompare(b,undefined,{numeric:true})).forEach(k=>t+=k+": "+ans[k]+"\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/plain"}));a.download="mock1-answers.txt";a.click()};
+};
+
+restore();
+go(+(localStorage.getItem("mock1_pg")||0));
+</script>
+</body>
+</html>
